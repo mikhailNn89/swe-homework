@@ -1,0 +1,10 @@
+#!/bin/bash
+#this script submit student brunch to remote repo
+user=`whoami`
+echo $user
+if [ -d .git ]
+then
+ git add .
+ git commit -m "submit"
+ git push --set-upstream origin $user
+fi

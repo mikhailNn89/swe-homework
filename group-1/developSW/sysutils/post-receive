@@ -1,0 +1,26 @@
+#!/bin/bash
+#this file implements behavor pattern adapter
+#if you want change system version control you need rewrite only this file
+
+while read oldrev newrev refname
+do
+    branch=$(git rev-parse --symbolic --abbrev-ref $refname)
+    echo "---PREPARE----"
+
+    #extract paht whithout /.git or /hooks
+    path=`pwd`
+    path=$(echo $path | sed 's/\/\.git//' | sed 's/\/hooks//')
+
+    #delete folder if exist
+    [ -d /tmp/$branch ] && rm -rf /tmp/$branch
+    mkdir /tmp/$branch
+
+    #clone repo to /tmp/name_branch
+    git clone $path -b $branch -q /tmp/$branch
+
+    #run script for test proccess
+    runTest $path $branch
+
+    #at last delete folder
+    rm -rf /tmp/$branch
+done

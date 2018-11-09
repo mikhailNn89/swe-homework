@@ -1,0 +1,18 @@
+#!/bin/bash
+#this script get distr from remote repo
+[ $# -ne 2 ] && echo "USE: get_task <lang> <task>" && exit 1
+#programming lang
+lang=$1
+#task
+task=$2
+#username
+user=`whoami`
+if [ -d $PATH_DISTR/$lang/$task ]
+then
+ git clone $PATH_DISTR/$lang/$task -b master
+ cd $task
+ git branch $user
+ git checkout $user
+else
+ echo "repo didn't find"
+fi

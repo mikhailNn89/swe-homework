@@ -1,0 +1,31 @@
+#!/bin/bash
+
+#path to repo with distributive
+path_d=$1
+
+#path to repo with test files
+path_t=$(echo $path_d | sed 's/DISTR/TEST/')
+
+#name branch
+branch=$2
+
+#extract programming lang
+tmp=$(echo $path_d | tr "/" " ")
+lang=$(echo $tmp | awk '{print $(NF-1)}')
+
+#extract name of task
+task=$(echo $tmp | awk '{print $NF}')
+
+#copy files for test to /tmp/branch
+cp $path_t/* /tmp/$branch
+
+#pattern strategy :))))
+#one case for each language
+case $lang in
+C) testC $branch;;
+*) echo "didn't find lang $lang";;
+esac
+
+result=$?
+#write result to file
+[ $result == 0 ] && updateDB $branch $lang $task "PASS" || updateDB $branch $lang $task "FAIL"

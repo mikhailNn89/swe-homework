@@ -1,0 +1,32 @@
+#!/bin/bash
+#this script show some data from DB file
+#file data base
+db=$PATH_DISTR/DB
+
+#if file not exist
+[ ! -e $db ] && echo "file DB isn't" && exit 1
+
+#if without parameter
+[ $# -eq 0 ] && cat $db && exit 0
+
+#parameter
+case $1 in
+
+#all pass test
+-p) head -1 $db
+    cat $db | grep "PASS";;
+#all fail test
+-f) head -1 $db
+    cat $db | grep "FAIL";;
+#all user's tests
+-u) head -1 $db
+    cat $db | grep "$2";;
+-h) echo "show you information of results ran tests"
+    echo -e "\t-p - print all entries with PASS test"
+    echo -e "\t-f - print all entries with FAIL test"
+    echo -e "\t-u <username> - print users entries"
+    echo -e "\twithout parameters print all entries"
+    echo
+    echo -e "\t-h - this help";;
+esac
+exit 0
