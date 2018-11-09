@@ -1,0 +1,41 @@
+#!/bin/bash
+#this file working with DB
+
+#name of user(name branch)
+user=$1
+#programming lang
+lang=$2
+#name of task
+task=$3
+#result
+res=$4
+#file DB
+db="$PATH_DISTR/DB"
+#date
+date=`date`
+#if file not exist then create file DB ang write entry
+if [ ! -e $db ]
+then
+ echo -e "user\tlang\ttask\tres\tdate" 1>$db
+ echo -e "$user\t$lang\t$task\t$res\t$date" 1>>$db
+ exit 0
+fi
+
+#if file DB exist then check - entry is into file DB
+count=`cat $db | grep "$user" | grep "$lang" | grep "$task" | wc -l`
+if [ $count -eq 0 ]
+then
+ echo add
+ #add new entry
+ echo -e "$user\t$lang\t$task\t$res\t$date" 1>>$db
+ exit 0
+else
+ echo update
+ #if entry exist in DB then delet it
+ cat $db | grep -v "$user\t$lang\t$task\t" 1>$db
+ #and add new entry
+ echo -e "$user\t$lang\t$task\t$res\t$date" 1>>$db
+fi
+
+#if entry is into DB then nothing to do and exit
+exit 0

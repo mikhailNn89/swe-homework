@@ -1,0 +1,27 @@
+#!/bin/bash
+#path to repo with test
+branch=$1
+
+echo "--------------"
+echo "---COMPILING--"
+
+#compil test
+cd /tmp/$1
+make test 1>/dev/null
+[ $? -ne 0 ] && echo "--COPMIL FAIL-" && exit 1
+echo "--------------"
+echo "---RUN TEST---"
+
+#run test
+./test
+
+result=$?
+echo "--------------"
+if [ $result = 0 ]
+then
+  echo "---TEST PASS--"
+  exit 0
+else
+  echo "---TEST FAIL--"
+  exit 1
+fi
